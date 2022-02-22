@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!-- Revolute-Revolute Manipulator -->
+<!--
+Copied and modified from ROS1 example -
+https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/#Pname#_description/urdf/#Pname#.xacro
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="1dof_robot">
+  <xacro:arg name="prefix" default="" />
+
+  <!-- Import #Pname# macro -->
+  <xacro:include filename="$(find #Pname#_description)/urdf/#Pname#_description.urdf.xacro" />
+
+  <!-- Import Rviz colors 
+  <xacro:include filename="$(find #Pname#_description)/gazebo/#Pname#.materials.xacro" />-->
+
+  <!-- Import #Pname# ros2_control description -->
+  <xacro:include filename="$(find #Pname#_description)/ros2_control/#Pname#.ros2_control.xacro" />
+
+  <!-- Used for fixing robot -->
+  <link name="world"/>
+  <gazebo reference="world">
+    <static>true</static>
+  </gazebo>
+
+  <xacro:#Pname# parent="world" prefix="$(arg prefix)">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:#Pname#>
+
+  <xacro:#Pname#_ros2_control
+    name="#Pname#" prefix="$(arg prefix)" />
+
+</robot>
