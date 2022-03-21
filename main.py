@@ -1,28 +1,34 @@
 import re
 import os
+import shutil
+from src.dictionaries import *
 
-def rename_files(dirName,project_name,allFiles):
+def rename_files(dirName,allFiles,param_dict):
     # create a list of file and sub directories 
     # names in the given directory 
 	listOfFile = os.listdir(dirName)
-    # Iterate over all the entries
+    # Iterate over all the entries		
 	for entry in listOfFile:
-        # Create full path
-		fullPath = os.path.join(dirName, entry)
-		# If entry is a directory then get the list of files in this directory 
-		if os.path.isdir(fullPath):
-			new_name = re.sub(r"#dir#", project_name , fullPath)
-			os.rename(fullPath,new_name)
-			rename_files(new_name,project_name,allFiles)
-		else:
-			new_name = re.sub(r"##", project_name , fullPath)
-			os.rename(fullPath,new_name)
-			allFiles.append(new_name)
+
+		if entry not in ignores: 
+			# Create full path
+			fullPath = os.path.join(dirName, entry)
+			new_path = fullPath 
+			for key,value in param_dict.items():
+				new_path = re.sub("#"+key+"#", value, new_path)
+
+			os.rename(fullPath,new_path)
+
+			if os.path.isdir(new_path):
+				rename_files(new_path,allFiles,param_dict)
+			else:
+				allFiles.append(new_path)
+			
                 
-	return allFiles
+	return allFiles	#this function returns list of files in all subfolders
         
 
-def changePlaceholders(param_dict,file_list):
+def rename_text(file_list,param_dict):
 	for file in file_list:
 		with open(file, "r+") as f:
 			text = f.read()
@@ -33,22 +39,42 @@ def changePlaceholders(param_dict,file_list):
 			f.truncate()
 		f.close()
 
-def getNames():
-	P_name = input("Please provide Project name:\n")
-	param_dict = {"Pname" : P_name}
-	return param_dict
+def getNames(param_dict):
+	for key in param_dict.keys():
+		P_name = input(f"Please provide {key}:\n")
+		if P_name!="":
+			param_dict[key] = P_name
 
-
+def choose_modality():
+	while True:
+		choose = int(input(banners[1]))
+		if choose > len(param_dict)+1 or choose < 0: #minimal error filtering 
+			continue
+		break
+	return choose
+		
 
 def main():
-	print("\n    #################################################\n\
-    #### Welcome to ROS2 Control template script ####\n\
-    #################################################\n ")
-	param_dict = getNames()	
+	print(banners[0])
 	
-	file_list = list()
-	file_list = rename_files(os.getcwd(), param_dict["Pname"], file_list)
-	changePlaceholders(param_dict, file_list)
+	dict_n = choose_modality()
+
+	if dict_n > 0:
+
+		os.system("clear -x")
+		
+		#prepare final directory
+		shutil.copytree(os.getcwd()+"/src/"+str(dict_n), os.getcwd()+"/result",dirs_exist_ok=True)
+
+		print(banners[dict_n+1])
+
+		getNames(param_dict[dict_n-1])	
+		
+		file_list = list()
+		file_list = rename_files(os.getcwd()+"/result", file_list, param_dict[dict_n-1])
+		rename_text(file_list, param_dict[dict_n-1])
+
+		print("\nPackage created successfully\n")
 
 if __name__ == "__main__":
 	main()

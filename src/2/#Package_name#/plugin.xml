@@ -1,0 +1,19 @@
+<library path="#Executable_name#">
+  <class name="#Namespace#/#classname#" type="#Namespace#::#classname#" base_class_type="rqt_gui_cpp::Plugin">
+    <description>
+      rqt slider for ros2 packages.
+    </description>
+    <qtgui>
+      
+      <group>
+        <label>Visualization</label>
+        <icon type="theme">applications-graphics</icon>
+        <statustip>Custom plugin.</statustip>
+      </group>
+
+      <label>Custom slider</label>
+      <icon type="theme">image-x-generic</icon>
+      <statustip>A custom plugin in rqt ROS2.</statustip>
+    </qtgui>
+  </class>
+</library>
