@@ -20,5 +20,4 @@ Once done, directory is available into result folder, move it to your workspace.
 
 
 ## improves
-* ignore main.py file while renaming. 
 * install rqt plugin locally (if not sourced, errors while opening rqt standalone)
