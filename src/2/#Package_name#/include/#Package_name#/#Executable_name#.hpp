@@ -5,7 +5,8 @@
 #include <rclcpp/rclcpp.hpp>
 
 // msgs
-#include <std_msgs/msg/bool.hpp>
+#include <std_msgs/msg/float64_multi_array.hpp>
+#include <sensor_msgs/msg/joint_state.hpp> 
 
 // Rqt
 #include <rqt_gui_cpp/plugin.h>
@@ -35,11 +36,14 @@ namespace #Namespace#
       QWidget* widget_;
 
     protected:
-      rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr publisher_custom_1;
-      std_msgs::msg::Bool msg_;
+      rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr publisher_custom_1;
+      rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr subscriber_custom_1;
+      std_msgs::msg::Float64MultiArray msg_;
 
     protected slots:
         void pub1Callback();
+        void sliderCallback(int);
+        void stateCallback(const sensor_msgs::msg::JointState);
   };
 } // namespace #Namespace#
 #endif // #classname#_H__

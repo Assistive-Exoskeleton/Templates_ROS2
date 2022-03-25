@@ -30,7 +30,7 @@
    <item alignment="Qt::AlignHCenter">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>aleluja funziona rcozio</string>
+      <string>rqt plugin slider</string>
      </property>
     </widget>
    </item>

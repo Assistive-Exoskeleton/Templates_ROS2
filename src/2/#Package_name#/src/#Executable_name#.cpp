@@ -33,13 +33,14 @@ void #classname#::initPlugin(qt_gui_cpp::PluginContext& context)
   context.addWidget(widget_);
 
   // ROS2 related declaration
-  publisher_custom_1 = node_->create_publisher<std_msgs::msg::Bool>("topic_name", 1);
-
+  publisher_custom_1 = node_->create_publisher<std_msgs::msg::Float64MultiArray>("/forward_position_controller/commands", 1);
+  subscriber_custom_1 = node_->create_subscription<sensor_msgs::msg::JointState>("/joint_states", 1, std::bind(&#classname#::stateCallback,this,std::placeholders::_1));
   // Prepare msg
-  msg_.data = true;
+  msg_.data = {0.0};
 
-  //TODO Connect with Qt Widget 
-  //connect(ui_.pushButton_1, SIGNAL(pressed()), this, SLOT(button1Callback()));
+  connect(ui.horizontalSlider, SIGNAL(valueChanged(int)), this, SLOT(sliderCallback(int)));
+
+  RCLCPP_INFO(rclcpp::get_logger("#classname#"), "Slider plugin init finished.\n");
 }
 
 void #classname#::shutdownPlugin()
@@ -52,14 +53,16 @@ void #classname#::saveSettings(qt_gui_cpp::Settings& plugin_settings, qt_gui_cpp
 {
   //save intrinsic configuration, usually using:
   // instance_settings.setValue(k, v)
-  ;
+  (void) (plugin_settings);
+  (void) (instance_settings);
 }
 
 void #classname#::restoreSettings(const qt_gui_cpp::Settings& plugin_settings, const qt_gui_cpp::Settings& instance_settings)
 {
   //restore intrinsic configuration, usually using:
   // v = instance_settings.value(k)
-  ;
+  (void) (plugin_settings);
+  (void) (instance_settings);
 }
 
 #classname#::~#classname#()
@@ -68,9 +71,20 @@ void #classname#::restoreSettings(const qt_gui_cpp::Settings& plugin_settings, c
         delete widget_;
 }
 
-void #classname#::pub1Callback()
+void #classname#::sliderCallback(int value)
 {
+    double converted = ((double)value/50)*3.14;
+    msg_.data = {converted};
+    //RCLCPP_INFO(rclcpp::get_logger("#classname#"), "New slider value: %f",converted);
     publisher_custom_1->publish(msg_);
+}
+
+void #classname#::stateCallback(const sensor_msgs::msg::JointState state_)
+{
+      int slider_value = (state_.position[0]/3.14)*50; 
+      ui.horizontalSlider->setValue(slider_value);
+    //RCLCPP_INFO(rclcpp::get_logger("#classname#"), "State value: %f",state_.position[0]);
+
 }
 
 /*bool hasConfiguration() const

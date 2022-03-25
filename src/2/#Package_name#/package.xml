@@ -3,7 +3,7 @@
 <package format="3">
   <name>#Package_name#</name>
   <version>0.0.0</version>
-  <description>rqt slider for ros2 packages</description>
+  <description>rqt plugin for ros2 packages</description>
   <maintainer email="danieledarenzo96@gmail.com">crazydaniel</maintainer>
   <license>MIT</license>
 
