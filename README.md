@@ -1,4 +1,8 @@
 # Templates ROS2
+
+[![Platform](https://img.shields.io/badge/platform-ROS2-blue?style=flat-square)](https://docs.ros.org/en/foxy/index.html)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/Assistive-Exoskeleton/Templates_ROS2?style=flat-square)
+
 A set of templates to create ros2 projects.\
 Each template has a private folder; availables are:
 
